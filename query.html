@@ -19,9 +19,13 @@
             查詢
         </button>
         <div id="result-container" class="mt-8 p-6 bg-gray-50 rounded-md" style="display: none;">
-            <h2 class="text-xl font-bold text-gray-700 mb-4">查詢結果</h2>
-            <p id="result-text" class="text-lg text-gray-800"></p>
-        </div>
+    <h2 class="text-xl font-bold text-gray-700 mb-4">查詢結果</h2>
+    <p id="result-text" class="text-lg text-gray-800"></p>
+
+    <div id="items-container" class="mt-4 pt-4 border-t" style="display: none;">
+        <h4 class="font-bold text-gray-700">訂購品項：</h4>
+        <pre id="items-list" class="text-gray-600 whitespace-pre-wrap font-sans"></pre>
+    </div>
         <div class="text-center mt-6">
             <a href="index.html" class="text-sm text-gray-600 hover:text-amber-800">返回首頁</a>
         </div>
@@ -50,6 +54,16 @@
 
                     if (data.status === 'success') {
                         resultText.innerHTML = `訂單 <strong>${data.orderNumber}</strong> 的狀態為：<span class="font-bold text-2xl text-green-600">${data.orderStatus}</span>`;
+                        const itemsContainer = document.getElementById('items-container');
+                        const itemsList = document.getElementById('items-list');
+
+                        // 檢查回傳的資料中是否有 items 欄位
+                    if (data.items) {
+                            itemsList.textContent = data.items; // 將商品內容填入
+                            itemsContainer.style.display = 'block'; // 顯示商品區塊
+                   } else {
+                        itemsContainer.style.display = 'none'; // 如果沒有，就隱藏
+                    }
                     } else {
                         resultText.textContent = data.message;
                     }
