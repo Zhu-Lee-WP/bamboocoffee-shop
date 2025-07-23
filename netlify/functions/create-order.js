@@ -50,9 +50,11 @@ exports.handler = async function(event) {
         });
 
         // 如果 n8n 沒有成功回應，就中斷流程，回傳錯誤
-        if (!n8nResponse.ok) {
-            throw new Error(`n8n 訂單建立失敗: ${n8nResponse.statusText}`);
-        }
+        const n8nResult = await n8nResponse.json();
+if (!n8nResponse.ok || n8nResult.status !== 'success') {
+    console.error('[錯誤] n8n 回應:', n8nResult);
+    throw new Error('n8n 訂單建立失敗，未收到成功狀態');
+}
         console.log('[n8n] n8n 訂單建立成功');
         
         // 2. 檢查付款方式，並執行對應操作
