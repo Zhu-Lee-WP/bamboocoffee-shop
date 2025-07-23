@@ -1,35 +1,39 @@
-// 檔案路徑: netlify/functions/ecpay-map-return.js (採用重新導向模式)
-exports.handler = async function(event, context) {
+// 檔案路徑: netlify/functions/ecpay-map-return.js (最終優化版 - postMessage)
+const querystring = require('querystring');
+
+exports.handler = async (event, context) => {
   if (event.httpMethod !== 'POST') {
     return { statusCode: 405, body: 'Method Not Allowed' };
   }
 
-  const checkoutUrl = `${process.env.URL}/checkout.html`;
+  const storeData = querystring.parse(event.body);
 
-  try {
-    const params = new URLSearchParams(event.body);
-    const cvsStoreId = params.get('CVSStoreID');
-    const cvsStoreName = params.get('CVSStoreName');
-    const cvsStoreAddress = params.get('CVSAddress');
+  const htmlResponse = `
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <title>處理中...</title>
+      <meta charset="utf-8">
+      <script>
+        window.onload = function() {
+          const message = {
+            action: 'ecpayStoreSelected',
+            store: ${JSON.stringify(storeData)}
+          };
+          // 使用 postMessage 將資料「喊話」給開啟此視窗的父視窗
+          window.opener.postMessage(message, '*');
+          // 關閉自己
+          window.close();
+        };
+      </script>
+    </head>
+    <body><p>資料處理中，請稍候...</p></body>
+    </html>
+  `;
 
-    if (!cvsStoreId || !cvsStoreName) {
-        console.error('[錯誤] 無法從綠界的回傳中解析出門市資料。 Body:', event.body);
-        return { statusCode: 302, headers: { Location: `${checkoutUrl}?status=store-error` } };
-    }
-
-    const encodedStoreName = encodeURIComponent(cvsStoreName);
-    const encodedStoreAddress = encodeURIComponent(cvsStoreAddress || '');
-    const redirectUrl = `${checkoutUrl}?status=store-selected&cvsStoreId=${cvsStoreId}&cvsStoreName=${encodedStoreName}&cvsStoreAddress=${encodedStoreAddress}`;
-
-    return {
-      statusCode: 302,
-      headers: { Location: redirectUrl },
-    };
-  } catch (error) {
-    console.error('[錯誤] ecpay-map-return function 發生嚴重錯誤:', error);
-    return {
-      statusCode: 302,
-      headers: { Location: `${checkoutUrl}?status=server-error` },
-    };
-  }
+  return {
+    statusCode: 200,
+    headers: { 'Content-Type': 'text/html; charset=utf-8' },
+    body: htmlResponse,
+  };
 };
