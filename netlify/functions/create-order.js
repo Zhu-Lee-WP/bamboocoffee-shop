@@ -74,7 +74,7 @@ if (!n8nResponse.ok || n8nResult.status !== 'success') {
                 TradeDesc: '竹意軒咖啡工坊線上訂單',
                 ItemName: itemName,
                 ReturnURL: `${siteUrl}/.netlify/functions/ecpay-return`, // 付款後 Server-side 回傳位置
-                OrderResultURL: `${siteUrl}/thankyou.html?order=${merchantTradeNo}`, // 付款後 Client-side 導向頁面
+                OrderResultURL: `${siteUrl}/.netlify/functions/payment-result`,
                 ChoosePayment: 'Credit',
                 EncryptType: 1,
             };
