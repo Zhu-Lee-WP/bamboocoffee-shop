@@ -28,7 +28,7 @@
         </div>
     </main>
     
-    <form id="ecpay-map-form" method="POST" action="https://logistics-stage.ecpay.com.tw/Express/map" target="_blank" style="display: none;">
+    <form id="ecpay-map-form" method="POST" action="https://payment-stage.ecpay.com.tw/Cashier/ExpressMap" target="_blank" style="display: none;">
         <input type="hidden" name="MerchantID" />
         <input type="hidden" name="MerchantTradeNo" />
         <input type="hidden" name="LogisticsType" value="CVS" />
@@ -39,7 +39,6 @@
     
     <script>
     document.addEventListener('DOMContentLoaded', () => {
-        // ... 此處省略與之前版本相同的變數宣告和初始設定 ...
         const shippingMethod = localStorage.getItem('shippingMethod');
         const cart = JSON.parse(localStorage.getItem('bamboo_cart') || '[]');
         const formTitle = document.getElementById('form-title');
@@ -54,10 +53,11 @@
         const selectStoreBtn = document.getElementById('select-store-btn');
         const ecpayMapForm = document.getElementById('ecpay-map-form');
         const selectedStoreInfoDiv = document.getElementById('selected-store-info');
-        let selectedStore = null;
+
+        let selectedStore = null; 
 
         if (!shippingMethod || cart.length === 0) { window.location.href = 'index.html'; return; }
-        if (shippingMethod === 'HOME_DELIVERY') { formTitle.textContent = '郵寄宅配資訊'; homeDeliveryForm.style.display = 'block'; }
+        if (shippingMethod === 'HOME_DELIVERY') { formTitle.textContent = '郵寄宅配資訊'; homeDeliveryForm.style.display = 'block'; } 
         else if (shippingMethod === 'CVS') { formTitle.textContent = '超商取貨資訊'; cvsForm.style.display = 'block'; }
         backBtn.addEventListener('click', () => { window.history.back(); });
 
@@ -75,40 +75,52 @@
         summarySubtotal.textContent = `NT$ ${subtotal}`;
         summaryShipping.innerHTML = subtotal >= 1000 ? `NT$ <del>${shippingMethod === 'CVS' ? 60 : 80}</del> 0 (已達免運門檻)` : `NT$ ${shippingFee}`;
         summaryTotal.textContent = `NT$ ${total}`;
-    
-        // 【最終修正】觸發地圖的邏輯
-        selectStoreBtn.addEventListener('click', () => {
-    const merchantIDInput = ecpayMapForm.querySelector('input[name="MerchantID"]');
-    const merchantTradeNoInput = ecpayMapForm.querySelector('input[name="MerchantTradeNo"]');
-    const serverReplyURLInput = ecpayMapForm.querySelector('input[name="ServerReplyURL"]');
-    
-    // ❗❗❗ 請務必確認這裡已換成您自己的【純數字】【測試用商店代號】❗❗❗
-    merchantIDInput.value = 'YOUR_TEST_MERCHANT_ID'; 
-    
-    merchantTradeNoInput.value = `bamboo${new Date().getTime()}`;
-    serverReplyURLInput.value = `${window.location.origin}/.netlify/functions/ecpay-map-return`;
-    
-    // 【重要修正】改用 window.open 的方式來開啟視窗
-    const mapWindowName = 'ecpay-map-window';
-    const mapWindow = window.open('', mapWindowName, 'width=1024,height=768');
-    
-    // 將表單的 target 指向我們剛剛打開的視窗的名稱
-    ecpayMapForm.target = mapWindowName;
-    
-    // 提交表單，內容會顯示在我們已打開的 mapWindow 中
-    ecpayMapForm.submit();
-});
-    
-        // 監聽從後端函式回傳的門市資料 (postMessage)
-        window.addEventListener('message', (event) => {
-            if (event.data && event.data.action === 'ecpayStoreSelected') {
-                selectedStore = event.data.store;
-                selectedStoreInfoDiv.innerHTML = `<p class="font-bold">${selectedStore.CVSStoreName} (${selectedStore.CVSStoreID})</p><p class="text-sm">${selectedStore.CVSAddress}</p>`;
+
+        // 【新邏輯】檢查網址列是否有從地圖回傳的門市資料
+        const urlParams = new URLSearchParams(window.location.search);
+        const status = urlParams.get('status');
+        if (status === 'store-selected') {
+            const storeId = urlParams.get('cvsStoreId');
+            const storeName = decodeURIComponent(urlParams.get('cvsStoreName') || '');
+            const storeAddress = decodeURIComponent(urlParams.get('cvsStoreAddress') || '');
+
+            if (storeId && storeName) {
+                selectedStore = { CVSStoreID: storeId, CVSStoreName: storeName, CVSAddress: storeAddress };
+                selectedStoreInfoDiv.innerHTML = `<p class="font-bold">${storeName} (${storeId})</p><p class="text-sm">${storeAddress}</p>`;
                 selectedStoreInfoDiv.classList.remove('text-gray-700');
                 selectedStoreInfoDiv.classList.add('text-green-800');
+                localStorage.setItem('selectedStore', JSON.stringify(selectedStore));
             }
-        }, false);
-    
+        }
+        
+        const savedStore = JSON.parse(localStorage.getItem('selectedStore'));
+        if (savedStore && shippingMethod === 'CVS') {
+            selectedStore = savedStore;
+            selectedStoreInfoDiv.innerHTML = `<p class="font-bold">${savedStore.CVSStoreName} (${savedStore.CVSStoreID})</p><p class="text-sm">${savedStore.CVSAddress}</p>`;
+            selectedStoreInfoDiv.classList.add('text-green-800');
+        }
+        
+        if (status) {
+            const cleanUrl = window.location.protocol + "//" + window.location.host + window.location.pathname;
+            window.history.replaceState({path: cleanUrl}, '', cleanUrl);
+        }
+
+        // 【還原】使用最單純的 submit 方式觸發地圖
+        selectStoreBtn.addEventListener('click', () => {
+            localStorage.removeItem('selectedStore');
+            const merchantIDInput = ecpayMapForm.querySelector('input[name="MerchantID"]');
+            const merchantTradeNoInput = ecpayMapForm.querySelector('input[name="MerchantTradeNo"]');
+            const serverReplyURLInput = ecpayMapForm.querySelector('input[name="ServerReplyURL"]');
+            
+            // ❗❗❗ 請務必將 'YOUR_TEST_MERCHANT_ID' 換成您自己的【純數字】【測試用商店代號】❗❗❗
+            merchantIDInput.value = '3002607'; 
+            
+            merchantTradeNoInput.value = `bamboo${new Date().getTime()}`;
+            serverReplyURLInput.value = `${window.location.origin}/.netlify/functions/ecpay-map-return`;
+            
+            ecpayMapForm.submit();
+        });
+        
         // 確認訂購按鈕邏輯
         confirmOrderBtn.addEventListener('click', () => {
              let isValid = true; let orderPayload = {};
