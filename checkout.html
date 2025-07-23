@@ -104,29 +104,91 @@
             }
         }, false);
     
-        // 確認訂購按鈕邏輯
-        confirmOrderBtn.addEventListener('click', () => {
-             let isValid = true; let orderPayload = {};
-            if (shippingMethod === 'HOME_DELIVERY') {
-                const name = document.getElementById('delivery-name').value.trim();
-                const phone = document.getElementById('delivery-phone').value.trim();
-                const address = document.getElementById('delivery-address').value.trim();
-                if (!/^09\d{8}$/.test(phone)) { alert('請輸入正確的 10 碼行動電話號碼。'); isValid = false; }
-                if (!name || !phone || !address) { alert('請確實填寫所有收件資訊。'); isValid = false; }
-                orderPayload = { name, phone, address };
-            } else if (shippingMethod === 'CVS') {
-                const name = document.getElementById('cvs-name').value.trim();
-                const phone = document.getElementById('cvs-phone').value.trim();
-                const paymentMethod = document.querySelector('input[name="payment"]:checked').value;
-                if (!/^09\d{8}$/.test(phone)) { alert('請輸入正確的 10 碼行動電話號碼。'); isValid = false; }
-                if (!name || !phone) { alert('請確實填寫取件人姓名與電話。'); isValid = false; }
-                if (!selectedStore) { alert('請選擇一間超商取貨門市。'); isValid = false; }
-                orderPayload = { name, phone, store: selectedStore, paymentMethod };
-            }
-            if (!isValid) { return; }
-            console.log('表單驗證通過！準備送到後端的資料：', { cart, shippingMethod, recipientInfo: orderPayload, orderTotal: total });
-            alert('驗證通過！下一步，我們將會在這裡呼叫後端函式！');
+        // ▼▼▼ 請找到 confirmOrderBtn.addEventListener... 這一段，並用下面的新版本完整替換它 ▼▼▼
+confirmOrderBtn.addEventListener('click', async () => {
+    let isValid = true; 
+    let recipientInfo = {};
+
+    // --- 表單驗證 (與之前相同) ---
+    if (shippingMethod === 'HOME_DELIVERY') {
+        const name = document.getElementById('delivery-name').value.trim();
+        const phone = document.getElementById('delivery-phone').value.trim();
+        const address = document.getElementById('delivery-address').value.trim();
+        if (!/^09\d{8}$/.test(phone)) { alert('請輸入正確的 10 碼行動電話號碼。'); isValid = false; }
+        if (!name || !phone || !address) { alert('請確實填寫所有收件資訊。'); isValid = false; }
+        recipientInfo = { name, phone, address, paymentMethod: 'CreditCard' }; // 宅配固定為信用卡
+    } else if (shippingMethod === 'CVS') {
+        const name = document.getElementById('cvs-name').value.trim();
+        const phone = document.getElementById('cvs-phone').value.trim();
+        const paymentMethod = document.querySelector('input[name="payment"]:checked').value;
+        if (!/^09\d{8}$/.test(phone)) { alert('請輸入正確的 10 碼行動電話號碼。'); isValid = false; }
+        if (!name || !phone) { alert('請確實填寫取件人姓名與電話。'); isValid = false; }
+        if (!selectedStore) { alert('請選擇一間超商取貨門市。'); isValid = false; }
+        recipientInfo = { name, phone, store: selectedStore, paymentMethod };
+    }
+    if (!isValid) { return; }
+
+    // --- 呼叫後端 Function (新邏輯) ---
+    confirmOrderBtn.disabled = true;
+    confirmOrderBtn.textContent = '訂單處理中...';
+
+    try {
+        const payload = {
+            cart: cart,
+            shippingMethod: shippingMethod,
+            recipientInfo: recipientInfo,
+            orderTotal: total
+        };
+
+        const response = await fetch('/.netlify/functions/create-order', {
+            method: 'POST',
+            body: JSON.stringify(payload)
         });
+
+        const result = await response.json();
+
+        if (result.status !== 'SUCCESS') {
+            throw new Error(result.message || '訂單建立失敗');
+        }
+
+        // --- 根據後端回傳結果，執行對應動作 ---
+        if (result.paymentMethod === 'CreditCard') {
+            // 動態建立表單並提交至綠界
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = result.paymentUrl;
+            form.style.display = 'none';
+
+            for (const key in result.orderData) {
+                const input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = key;
+                input.value = result.orderData[key];
+                form.appendChild(input);
+            }
+
+            const checkMacValueInput = document.createElement('input');
+            checkMacValueInput.type = 'hidden';
+            checkMacValueInput.name = 'CheckMacValue';
+            checkMacValueInput.value = result.checkMacValue;
+            form.appendChild(checkMacValueInput);
+
+            document.body.appendChild(form);
+            form.submit();
+        } else if (result.paymentMethod === 'COD') {
+            // 清空購物車並跳轉到感謝頁面
+            localStorage.removeItem('cart');
+            localStorage.removeItem('selectedStore');
+            window.location.href = `/thankyou.html?order=${result.orderNumber}`;
+        }
+
+    } catch (error) {
+        console.error('確認訂購時發生錯誤:', error);
+        alert(`訂單處理失敗：${error.message}`);
+        confirmOrderBtn.disabled = false;
+        confirmOrderBtn.textContent = '確認訂購';
+    }
+});
     });
     </script>
 </body>
