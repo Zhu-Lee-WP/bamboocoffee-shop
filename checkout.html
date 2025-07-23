@@ -179,7 +179,7 @@
             localStorage.removeItem('selectedStore');
             const merchantIDInput = ecpayMapForm.querySelector('input[name="MerchantID"]');
             const serverReplyURLInput = ecpayMapForm.querySelector('input[name="ServerReplyURL"]');
-            merchantIDInput.value = '請在這裡貼上您純數字的測試商店代號'; 
+            merchantIDInput.value = '3002607'; 
             serverReplyURLInput.value = `${window.location.origin}/.netlify/functions/ecpay-map-return`;
             ecpayMapForm.submit();
         });
