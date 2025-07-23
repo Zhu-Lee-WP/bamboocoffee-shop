@@ -78,21 +78,26 @@
     
         // 【最終修正】觸發地圖的邏輯
         selectStoreBtn.addEventListener('click', () => {
-            const merchantIDInput = ecpayMapForm.querySelector('input[name="MerchantID"]');
-            const merchantTradeNoInput = ecpayMapForm.querySelector('input[name="MerchantTradeNo"]');
-            const serverReplyURLInput = ecpayMapForm.querySelector('input[name="ServerReplyURL"]');
-            
-            // ❗❗❗ 請務必將 'YOUR_TEST_MERCHANT_ID' 換成您自己的【純數字】【測試用商店代號】❗❗❗
-            merchantIDInput.value = '3002607'; 
-            
-            // 【重要】動態產生一組唯一的廠商交易編號
-            merchantTradeNoInput.value = `bamboo${new Date().getTime()}`;
-            
-            // 設定回傳給後端函式的網址
-            serverReplyURLInput.value = `${window.location.origin}/.netlify/functions/ecpay-map-return`;
-            
-            ecpayMapForm.submit();
-        });
+    const merchantIDInput = ecpayMapForm.querySelector('input[name="MerchantID"]');
+    const merchantTradeNoInput = ecpayMapForm.querySelector('input[name="MerchantTradeNo"]');
+    const serverReplyURLInput = ecpayMapForm.querySelector('input[name="ServerReplyURL"]');
+    
+    // ❗❗❗ 請務必確認這裡已換成您自己的【純數字】【測試用商店代號】❗❗❗
+    merchantIDInput.value = 'YOUR_TEST_MERCHANT_ID'; 
+    
+    merchantTradeNoInput.value = `bamboo${new Date().getTime()}`;
+    serverReplyURLInput.value = `${window.location.origin}/.netlify/functions/ecpay-map-return`;
+    
+    // 【重要修正】改用 window.open 的方式來開啟視窗
+    const mapWindowName = 'ecpay-map-window';
+    const mapWindow = window.open('', mapWindowName, 'width=1024,height=768');
+    
+    // 將表單的 target 指向我們剛剛打開的視窗的名稱
+    ecpayMapForm.target = mapWindowName;
+    
+    // 提交表單，內容會顯示在我們已打開的 mapWindow 中
+    ecpayMapForm.submit();
+});
     
         // 監聽從後端函式回傳的門市資料 (postMessage)
         window.addEventListener('message', (event) => {
