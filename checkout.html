@@ -15,84 +15,28 @@
     </style>
 </head>
 <body>
-
-    <header class="bg-white/90 backdrop-blur-md sticky top-0 z-50 shadow-sm">
-        <nav class="container mx-auto px-6 py-3">
-            <div class="flex justify-between items-center">
-                <div class="text-xl font-bold text-gray-800"><span class="text-amber-800">C.</span> 竹意軒的咖啡工坊</div>
-                <div><a href="index.html" class="text-gray-600 hover:text-amber-800">返回首頁繼續購物</a></div>
-            </div>
-        </nav>
-    </header>
-
+    <header class="bg-white/90 backdrop-blur-md sticky top-0 z-50 shadow-sm"><nav class="container mx-auto px-6 py-3"><div class="flex justify-between items-center"><div class="text-xl font-bold text-gray-800"><span class="text-amber-800">C.</span> 竹意軒的咖啡工坊</div><div><a href="index.html" class="text-gray-600 hover:text-amber-800">返回首頁繼續購物</a></div></div></nav></header>
     <main class="container mx-auto px-6 py-12">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-16">
             <section>
                 <button id="back-btn" class="text-gray-600 hover:text-amber-800 mb-6">&larr; 返回上一步</button>
                 <h2 id="form-title" class="text-3xl font-bold text-gray-800 mb-8">載入中...</h2>
-                <form id="home-delivery-form" style="display: none;" class="space-y-6">
-                    <div>
-                        <label for="delivery-name" class="block text-sm font-medium text-gray-700 mb-2">收件人姓名</label>
-                        <input type="text" id="delivery-name" name="name" required class="form-input">
-                    </div>
-                    <div>
-                        <label for="delivery-phone" class="block text-sm font-medium text-gray-700 mb-2">行動電話</label>
-                        <input type="tel" id="delivery-phone" name="phone" required class="form-input" placeholder="請輸入 09 開頭的 10 位數字">
-                    </div>
-                    <div>
-                        <label for="delivery-address" class="block text-sm font-medium text-gray-700 mb-2">郵寄地址</label>
-                        <input type="text" id="delivery-address" name="address" required class="form-input">
-                    </div>
-                </form>
-                <form id="cvs-form" style="display: none;" class="space-y-6">
-                     <div>
-                        <label for="cvs-name" class="block text-sm font-medium text-gray-700 mb-2">取件人姓名</label>
-                        <input type="text" id="cvs-name" name="name" required class="form-input">
-                    </div>
-                    <div>
-                        <label for="cvs-phone" class="block text-sm font-medium text-gray-700 mb-2">取件人行動電話</label>
-                        <input type="tel" id="cvs-phone" name="phone" required class="form-input" placeholder="請輸入 09 開頭的 10 位數字">
-                    </div>
-                    <div>
-                         <label class="block text-sm font-medium text-gray-700 mb-2">取貨門市</label>
-                         <div id="selected-store-info" class="p-4 bg-gray-100 rounded-md text-gray-700 min-h-[50px]">尚未選擇門市</div>
-                         <button type="button" id="select-store-btn" class="mt-2 bg-white border border-gray-300 hover:bg-gray-50 text-gray-800 font-bold py-2 px-4 rounded-lg">選擇 7-ELEVEN 門市</button>
-                    </div>
-                    <div class="border-t pt-4">
-                        <label class="block text-sm font-medium text-gray-700 mb-2">付款方式</label>
-                        <div class="space-y-2">
-                             <label class="flex items-center"><input type="radio" name="payment" value="CreditCard" checked class="h-4 w-4 text-amber-600 border-gray-300 focus:ring-amber-500"> <span class="ml-2">信用卡付款</span></label>
-                             <label class="flex items-center"><input type="radio" name="payment" value="COD" class="h-4 w-4 text-amber-600 border-gray-300 focus:ring-amber-500"> <span class="ml-2">取貨付款</span></label>
-                        </div>
-                    </div>
-                </form>
+                <form id="home-delivery-form" style="display: none;" class="space-y-6"><div><label for="delivery-name" class="block text-sm font-medium text-gray-700 mb-2">收件人姓名</label><input type="text" id="delivery-name" name="name" required class="form-input"></div><div><label for="delivery-phone" class="block text-sm font-medium text-gray-700 mb-2">行動電話</label><input type="tel" id="delivery-phone" name="phone" required class="form-input" placeholder="請輸入 09 開頭的 10 位數字"></div><div><label for="delivery-address" class="block text-sm font-medium text-gray-700 mb-2">郵寄地址</label><input type="text" id="delivery-address" name="address" required class="form-input"></div></form>
+                <form id="cvs-form" style="display: none;" class="space-y-6"><div><label for="cvs-name" class="block text-sm font-medium text-gray-700 mb-2">取件人姓名</label><input type="text" id="cvs-name" name="name" required class="form-input"></div><div><label for="cvs-phone" class="block text-sm font-medium text-gray-700 mb-2">取件人行動電話</label><input type="tel" id="cvs-phone" name="phone" required class="form-input" placeholder="請輸入 09 開頭的 10 位數字"></div><div><label class="block text-sm font-medium text-gray-700 mb-2">取貨門市</label><div id="selected-store-info" class="p-4 bg-gray-100 rounded-md text-gray-700 min-h-[50px]">尚未選擇門市</div><button type="button" id="select-store-btn" class="mt-2 bg-white border border-gray-300 hover:bg-gray-50 text-gray-800 font-bold py-2 px-4 rounded-lg">選擇 7-ELEVEN 門市</button></div><div class="border-t pt-4"><label class="block text-sm font-medium text-gray-700 mb-2">付款方式</label><div class="space-y-2"><label class="flex items-center"><input type="radio" name="payment" value="CreditCard" checked class="h-4 w-4 text-amber-600 border-gray-300 focus:ring-amber-500"> <span class="ml-2">信用卡付款</span></label><label class="flex items-center"><input type="radio" name="payment" value="COD" class="h-4 w-4 text-amber-600 border-gray-300 focus:ring-amber-500"> <span class="ml-2">取貨付款</span></label></div></div></form>
             </section>
-            <aside class="bg-white p-8 rounded-lg shadow-md h-fit">
-                <h3 class="text-2xl font-bold border-b pb-4 mb-6">訂單摘要</h3>
-                <div id="summary-items" class="space-y-4 mb-6"></div>
-                <div class="border-t pt-4 space-y-3">
-                    <div class="flex justify-between"><span>商品小計</span><span id="summary-subtotal">NT$ 0</span></div>
-                    <div class="flex justify-between"><span>運費</span><span id="summary-shipping">NT$ 0</span></div>
-                    <div class="flex justify-between font-bold text-xl"><span>總計</span><span id="summary-total">NT$ 0</span></div>
-                </div>
-                <button id="confirm-order-btn" class="w-full mt-8 bg-amber-800 hover:bg-amber-900 text-white font-bold py-3 px-4 rounded-lg transition-colors">確認訂購</button>
-            </aside>
+            <aside class="bg-white p-8 rounded-lg shadow-md h-fit"><h3 class="text-2xl font-bold border-b pb-4 mb-6">訂單摘要</h3><div id="summary-items" class="space-y-4 mb-6"></div><div class="border-t pt-4 space-y-3"><div class="flex justify-between"><span>商品小計</span><span id="summary-subtotal">NT$ 0</span></div><div class="flex justify-between"><span>運費</span><span id="summary-shipping">NT$ 0</span></div><div class="flex justify-between font-bold text-xl"><span>總計</span><span id="summary-total">NT$ 0</span></div></div><button id="confirm-order-btn" class="w-full mt-8 bg-amber-800 hover:bg-amber-900 text-white font-bold py-3 px-4 rounded-lg transition-colors">確認訂購</button></aside>
         </div>
     </main>
 
-    <form id="ecpay-map-form" method="POST" action="https://payment-stage.ecpay.com.tw/Cashier/ExpressMap" target="_blank" style="display: none;">
-        <input type="hidden" name="MerchantID" />
-        <input type="hidden" name="LogisticsType" value="CVS" />
+    <form id="ecpay-map-form" method="POST" action="https://payment-stage.ecpay.com.tw/Express/map" target="_blank" style="display: none;">
+        <input type="hidden" name="MerchantID" value="2000132" /> <input type="hidden" name="LogisticsType" value="CVS" />
         <input type="hidden" name="LogisticsSubType" value="UNIMART" />
         <input type="hidden" name="IsCollection" value="Y" />
-        <input type="hidden" name="ServerReplyURL" />
+        <input type="hidden" name="ReplyURL" />
     </form>
-
-    <script src="https://payment-stage.ecpay.com.tw/Scripts/sdk/ecpay.sdk.js"></script>
 
     <script>
     document.addEventListener('DOMContentLoaded', () => {
-        // --- 1. 獲取所有需要的 HTML 元素 ---
         const shippingMethod = localStorage.getItem('shippingMethod');
         const cart = JSON.parse(localStorage.getItem('bamboo_cart') || '[]');
         const formTitle = document.getElementById('form-title');
@@ -108,21 +52,13 @@
         const ecpayMapForm = document.getElementById('ecpay-map-form');
         const selectedStoreInfoDiv = document.getElementById('selected-store-info');
 
-        // --- 2. 初始化狀態變數 ---
-        let selectedStore = null; 
+        let selectedStore = null;
 
-        // --- 3. 頁面初始設定 ---
         if (!shippingMethod || cart.length === 0) { window.location.href = 'index.html'; return; }
-        if (shippingMethod === 'HOME_DELIVERY') {
-            formTitle.textContent = '郵寄宅配資訊';
-            homeDeliveryForm.style.display = 'block';
-        } else if (shippingMethod === 'CVS') {
-            formTitle.textContent = '超商取貨資訊';
-            cvsForm.style.display = 'block';
-        }
+        if (shippingMethod === 'HOME_DELIVERY') { formTitle.textContent = '郵寄宅配資訊'; homeDeliveryForm.style.display = 'block'; } 
+        else if (shippingMethod === 'CVS') { formTitle.textContent = '超商取貨資訊'; cvsForm.style.display = 'block'; }
         backBtn.addEventListener('click', () => { window.history.back(); });
 
-        // --- 4. 渲染訂單摘要 ---
         let subtotal = 0;
         summaryItems.innerHTML = '';
         cart.forEach(item => {
@@ -138,57 +74,41 @@
         summaryShipping.innerHTML = subtotal >= 1000 ? `NT$ <del>${shippingMethod === 'CVS' ? 60 : 80}</del> 0 (已達免運門檻)` : `NT$ ${shippingFee}`;
         summaryTotal.textContent = `NT$ ${total}`;
 
-        // --- 5. 檢查網址列是否有從地圖回傳的門市資料 (新邏輯) ---
-        const urlParams = new URLSearchParams(window.location.search);
-        const status = urlParams.get('status');
-
-        if (status === 'store-selected') {
-            const storeId = urlParams.get('cvsStoreId');
-            const storeName = decodeURIComponent(urlParams.get('cvsStoreName') || '');
-            const storeAddress = decodeURIComponent(urlParams.get('cvsStoreAddress') || '');
-
-            if (storeId && storeName) {
-                selectedStore = { CVSStoreID: storeId, CVSStoreName: storeName, CVSAddress: storeAddress };
-                selectedStoreInfoDiv.innerHTML = `<p class="font-bold">${storeName} (${storeId})</p><p class="text-sm">${storeAddress}</p>`;
-                selectedStoreInfoDiv.classList.remove('text-gray-700');
-                selectedStoreInfoDiv.classList.add('text-green-800');
-                // 將門市資訊也存入 localStorage，避免使用者刷新頁面後遺失
-                localStorage.setItem('selectedStore', JSON.stringify(selectedStore));
-            }
-        } else if (status === 'store-error' || status === 'server-error') {
-            alert('選擇門市時發生錯誤，請稍後再試。');
-        }
-        
-        // 如果 localStorage 中有之前選好的門市，也把它讀取出來顯示
-        const savedStore = JSON.parse(localStorage.getItem('selectedStore'));
-        if (savedStore && shippingMethod === 'CVS') {
-            selectedStore = savedStore;
-            selectedStoreInfoDiv.innerHTML = `<p class="font-bold">${savedStore.CVSStoreName} (${savedStore.CVSStoreID})</p><p class="text-sm">${savedStore.CVSAddress}</p>`;
-            selectedStoreInfoDiv.classList.add('text-green-800');
-        }
-        
-        // 清理網址，避免使用者刷新頁面時重複跳出提示
-        if (status) {
-            const cleanUrl = window.location.protocol + "//" + window.location.host + window.location.pathname;
-            window.history.replaceState({path: cleanUrl}, '', cleanUrl);
-        }
-
-        // --- 6. 觸發地圖的邏輯 (與之前相同) ---
+        // 觸發地圖
         selectStoreBtn.addEventListener('click', () => {
-            // 清除 localStorage 中舊的門市資訊，準備接收新的
-            localStorage.removeItem('selectedStore');
-            const merchantIDInput = ecpayMapForm.querySelector('input[name="MerchantID"]');
-            const serverReplyURLInput = ecpayMapForm.querySelector('input[name="ServerReplyURL"]');
-            merchantIDInput.value = '3002607'; 
-            serverReplyURLInput.value = `${window.location.origin}/.netlify/functions/ecpay-map-return`;
+            const replyURLInput = ecpayMapForm.querySelector('input[name="ReplyURL"]');
+            // 設定回傳頁面的網址
+            replyURLInput.value = `${window.location.origin}/map-reply.html`;
+            console.log("設定 ReplyURL 為:", replyURLInput.value);
             ecpayMapForm.submit();
         });
         
-        // --- 7. 確認訂購按鈕邏輯 (與之前相同) ---
+        // 監聽 localStorage 的變化
+        window.addEventListener('storage', (event) => {
+            if (event.key === 'ecpayStoreSelected') {
+                const storeData = JSON.parse(event.newValue);
+                if (storeData) {
+                    selectedStore = storeData;
+                    console.log('透過 storage 監聽到已選擇門市：', selectedStore);
+                    selectedStoreInfoDiv.innerHTML = `<p class="font-bold">${selectedStore.CVSStoreName} (${selectedStore.CVSStoreID})</p><p class="text-sm">${selectedStore.CVSAddress}</p>`;
+                    selectedStoreInfoDiv.classList.remove('text-gray-700');
+                    selectedStoreInfoDiv.classList.add('text-green-800');
+                }
+                // 清理掉 localStorage 的暫存資料
+                localStorage.removeItem('ecpayStoreSelected');
+            }
+        });
+
+        // 確認訂購按鈕邏輯
         confirmOrderBtn.addEventListener('click', () => {
              let isValid = true; let orderPayload = {};
             if (shippingMethod === 'HOME_DELIVERY') {
-                // ... 省略與之前相同的驗證邏輯 ...
+                const name = document.getElementById('delivery-name').value.trim();
+                const phone = document.getElementById('delivery-phone').value.trim();
+                const address = document.getElementById('delivery-address').value.trim();
+                if (!/^09\d{8}$/.test(phone)) { alert('請輸入正確的 10 碼行動電話號碼。'); isValid = false; }
+                if (!name || !phone || !address) { alert('請確實填寫所有收件資訊。'); isValid = false; }
+                orderPayload = { name, phone, address };
             } else if (shippingMethod === 'CVS') {
                 const name = document.getElementById('cvs-name').value.trim();
                 const phone = document.getElementById('cvs-phone').value.trim();
@@ -203,6 +123,6 @@
             alert('驗證通過！下一步，我們將會在這裡呼叫後端函式！');
         });
     });
-</script>
+    </script>
 </body>
 </html>
