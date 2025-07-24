@@ -367,10 +367,17 @@
         <section id="product-list" class="mt-12 md:mt-16 mb-12 md:mb-16 scroll-mt-16">
             <h2 class="text-3xl font-bold text-center mb-2 text-gray-800">本月精選咖啡</h2>
             <p class="text-center text-gray-500 mb-10">來自世界咖啡產區的風土滋味</p>
+            <div id="filter-buttons" class="flex justify-center gap-4 md:gap-6 mb-10">
+        <button class="tab-btn active" data-filter="all">所有商品</button>
+        <button class="tab-btn" data-filter="light-medium">淺中焙</button>
+        <button class="tab-btn" data-filter="medium-dark">中深焙</button>
+        <button class="tab-btn" data-filter="sale">低庫存促銷</button>
+    </div>
             
             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-8">
                 
-                <div class="bg-white rounded-lg shadow-lg overflow-hidden card-hover flex flex-col" data-product-id="prod_001">
+                <div class="coffee-card bg-white rounded-lg shadow-lg overflow-hidden card-hover flex flex-col" data-product-id="prod_001" data-category="light-medium">
+    </div>
                     <img src="images/coffee/衣索比亞 雅比兔 水洗.jpg" alt="衣索比亞 耶家雪菲 咖啡豆" class="w-full h-56 object-cover">
                     <div class="p-6 flex-grow flex flex-col">
                         <h3 class="text-2xl font-bold text-amber-800 mb-2">衣索比亞 古籍 烏拉嘎 雅比兔 水洗</h3>
@@ -402,7 +409,8 @@
                             </div>
                     </div>
                 </div>
-                <div class="bg-white rounded-lg shadow-lg overflow-hidden card-hover flex flex-col" data-product-id="prod_002">
+                <div class="coffee-card bg-white rounded-lg shadow-lg overflow-hidden card-hover flex flex-col" data-product-id="prod_002" data-category="light-medium">
+    </div>
                     <img src="images/coffee/衣索比亞 卡拉莫 遮蔭慢乾 日曬.jpg" alt="衣索比亞 咖啡豆" class="w-full h-56 object-cover">
                     <div class="p-6 flex-grow flex flex-col">
                         <h3 class="text-2xl font-bold text-amber-800 mb-2">衣索比亞 古吉 卡拉莫 遮蔭慢乾 日曬</h3>
@@ -434,7 +442,8 @@
                             </div>
                     </div>
                 </div>
-                <div class="bg-white rounded-lg shadow-lg overflow-hidden card-hover flex flex-col" data-product-id="prod_003">
+                <div class="coffee-card bg-white rounded-lg shadow-lg overflow-hidden card-hover flex flex-col" data-product-id="prod_003" data-category="light-medium">
+    </div>
                     <img src="images/coffee/肯亞 冽里 吉康達合作社 水洗.jpg" alt="肯亞 咖啡豆" class="w-full h-56 object-cover">
                     <div class="p-6 flex-grow flex flex-col">
                         <h3 class="text-2xl font-bold text-amber-800 mb-2">肯亞 冽里 吉康達合作社 AB Top 水洗</h3>
@@ -466,7 +475,8 @@
                             </div>
                     </div>
                 </div>
-                <div class="bg-white rounded-lg shadow-lg overflow-hidden card-hover flex flex-col" data-product-id="prod_004">
+                <div class="coffee-card bg-white rounded-lg shadow-lg overflow-hidden card-hover flex flex-col" data-product-id="prod_004" data-category="light-medium">
+    </div>
                     <img src="images/coffee/宏都拉斯 蜜桃莊園 卡杜艾.jpg" alt="宏都拉斯 咖啡豆" class="w-full h-56 object-cover">
                     <div class="p-6 flex-grow flex flex-col">
                         <h3 class="text-2xl font-bold text-amber-800 mb-2">宏都拉斯 拉巴斯省 蜜桃莊園 卡度艾 蜜處理</h3>
@@ -498,7 +508,8 @@
                             </div>
                     </div>
                 </div>
-                <div class="bg-white rounded-lg shadow-lg overflow-hidden card-hover flex flex-col" data-product-id="prod_005">
+                <div class="coffee-card bg-white rounded-lg shadow-lg overflow-hidden card-hover flex flex-col" data-product-id="prod_005" data-category="sale">
+    </div>
                     <img src="images/coffee/衣索比亞 八蕾處理廠.jpg" alt="伊索比亞 咖啡豆" class="w-full h-56 object-cover">
                     <div class="p-6 flex-grow flex flex-col">
                         <h3 class="text-2xl font-bold text-amber-800 mb-2">衣索比亞 西達瑪 柏娜 芭蕾處理場 日曬</h3>
@@ -530,7 +541,8 @@
                             </div>
                     </div>
                 </div>
-                <div class="bg-white rounded-lg shadow-lg overflow-hidden card-hover flex flex-col" data-product-id="prod_006">
+                <div class="coffee-card bg-white rounded-lg shadow-lg overflow-hidden card-hover flex flex-col" data-product-id="prod_006" data-category="medium-dark">
+    </div>
                     <img src="images/coffee/哥倫比亞 薇拉省 水洗.jpg" alt="哥倫比亞 咖啡豆" class="w-full h-56 object-cover">
                     <div class="p-6 flex-grow flex flex-col">
                         <h3 class="text-2xl font-bold text-amber-800 mb-2">哥倫比亞 薇拉省 黃金酋長 水洗</h3>
@@ -675,78 +687,56 @@
     </footer>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const tabs = document.querySelectorAll('.tab-btn');
-            const coffeeCards = document.querySelectorAll('.coffee-card');
-            const menuBtn = document.getElementById('menu-btn');
-            const mobileMenu = document.getElementById('mobile-menu');
+        // ▼▼▼ 請用這個新版本，完整替換掉您檔案中第一個 <script> 標籤內的全部內容 ▼▼▼
+document.addEventListener('DOMContentLoaded', function() {
+    const menuBtn = document.getElementById('menu-btn');
+    const mobileMenu = document.getElementById('mobile-menu');
 
-            // 漢堡選單功能
-            menuBtn.addEventListener('click', () => {
-                mobileMenu.classList.toggle('hidden');
+    // 漢堡選單功能
+    menuBtn.addEventListener('click', () => {
+        mobileMenu.classList.toggle('hidden');
+    });
+    
+    // 頁內平滑滾動
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            if (!mobileMenu.classList.contains('hidden')) {
+                mobileMenu.classList.add('hidden');
+            }
+            document.querySelector(this.getAttribute('href')).scrollIntoView({
+                behavior: 'smooth'
             });
-
-            // 頁籤篩選功能
-            tabs.forEach(tab => {
-                tab.addEventListener('click', () => {
-                    // 更新頁籤樣式
-                    tabs.forEach(t => t.classList.remove('active'));
-                    tab.classList.add('active');
-
-                    const filter = tab.dataset.filter;
-
-                    // 篩選咖啡卡片
-                    coffeeCards.forEach(card => {
-                        const cardGroup = card.dataset.group;
-                        // 特殊處理印尼曼特寧，讓它在日曬分類也顯示
-                        const isSpecialCase = (filter === 'natural' && cardGroup === 'wet-hulled');
-
-                        if (filter === 'all' || cardGroup === filter || isSpecialCase) {
-                            // 使用 setTimeout 讓 CSS transition 效果可見
-                            card.style.opacity = '0';
-                            card.style.transform = 'scale(0.95)';
-                            setTimeout(() => {
-                                card.style.display = 'block';
-                                setTimeout(() => {
-                                    card.style.opacity = '1';
-                                    card.style.transform = 'scale(1)';
-                                }, 10);
-                            }, 250);
-                        } else {
-                            card.style.opacity = '0';
-                            card.style.transform = 'scale(0.95)';
-                            setTimeout(() => {
-                                card.style.display = 'none';
-                            }, 250); // 配合 transition 時間
-                        }
-                    });
-                });
-            });
-            
-            // 頁內平滑滾動
-            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-                anchor.addEventListener('click', function (e) {
-                    e.preventDefault();
-                    
-                    // 點擊連結後關閉行動版選單
-                    if (!mobileMenu.classList.contains('hidden')) {
-                        mobileMenu.classList.add('hidden');
-                    }
-
-                    document.querySelector(this.getAttribute('href')).scrollIntoView({
-                        behavior: 'smooth'
-                    });
-                });
-            });
-
-            // 初始載入時顯示所有卡片
-            coffeeCards.forEach(card => {
-                card.style.display = 'block';
-                card.style.opacity = '1';
-                card.style.transform = 'scale(1)';
-            });
-
         });
+    });
+
+    // --- 【全新】商品分類篩選邏輯 ---
+    const filterButtons = document.querySelectorAll('#filter-buttons .tab-btn');
+    const coffeeCards = document.querySelectorAll('.coffee-card');
+
+    filterButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            // 更新按鈕樣式
+            filterButtons.forEach(btn => btn.classList.remove('active'));
+            button.classList.add('active');
+
+            const filter = button.dataset.filter;
+
+            // 篩選商品卡片
+            coffeeCards.forEach(card => {
+                const category = card.dataset.category;
+                
+                // 檢查商品的分類 (category) 是否包含我們點擊的過濾條件 (filter)
+                // 如果點擊的是 "all"，或商品的分類中包含該過濾詞，就顯示
+                if (filter === 'all' || (category && category.includes(filter))) {
+                    card.style.display = 'flex'; // 使用 flex 以維持卡片內部排版
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        });
+    });
+});
     </script>
     <script>
     // 等待整個網頁文件都載入完成後，再執行裡面的程式碼
