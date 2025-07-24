@@ -136,12 +136,13 @@
                 <span class="text-amber-800">C.</span> 竹意軒的咖啡工坊
             </div>
             <div class="md:hidden">
-                <button id="menu-btn" type="button" class="text-gray-600 hover:text-amber-800 focus:outline-none">
-                    <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
-                    </svg>
-                </button>
-            </div>
+    <button id="menu-btn" type="button" class="relative text-gray-600 hover:text-amber-800 focus:outline-none">
+        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+        </svg>
+        <span id="menu-cart-dot" class="absolute -top-1 -right-1 bg-red-600 rounded-full h-3 w-3 hidden"></span>
+    </button>
+</div>
             <div class="hidden md:flex items-center space-x-8">
                 <a href="index.html" class="text-amber-800 hover:text-amber-600 font-bold border-r border-gray-300 pr-8">返回首頁</a>
                 <a href="#about-single-origin" class="text-gray-600 hover:text-amber-800">關於單品</a>
@@ -820,6 +821,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // 新增的結帳按鈕
     const cvsCheckoutBtn = document.getElementById('cvs-checkout-btn');
     const homeDeliveryCheckoutBtn = document.getElementById('home-delivery-checkout-btn');
+    const menuCartDot = document.getElementById('menu-cart-dot');
 
     // --- 2. 初始化購物車 ---
     let cart = JSON.parse(localStorage.getItem('bamboo_cart')) || [];
@@ -852,39 +854,50 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function renderCartItems() {
-        if (!cartItemsContainer) return; // 如果找不到元素，就提前結束，避免錯誤
-        cartItemsContainer.innerHTML = '';
-        if (cart.length === 0) {
-            cartItemsContainer.innerHTML = '<p class="text-gray-500">您的購物車是空的。</p>';
-            cartCountEls.forEach(el => el.classList.add('hidden'));
-            return;
-        }
-        let totalItems = 0;
-        cart.forEach(item => {
-            totalItems += item.quantity;
-            const itemEl = document.createElement('div');
-            itemEl.className = 'flex justify-between items-center mb-4 p-2 border-b';
-            itemEl.innerHTML = `
-                <div class="w-3/4">
-                    <p class="font-bold truncate">${item.name}</p>
-                    <p class="text-sm text-gray-600">NT$ ${item.price} x ${item.quantity}</p>
-                </div>
-                <div class="w-1/4 text-right">
-                    <button class="remove-from-cart-btn text-red-500 hover:text-red-700 text-sm" data-id="${item.id}">移除</button>
-                </div>
-            `;
-            cartItemsContainer.appendChild(itemEl);
+    if (!cartItemsContainer) return; 
+    cartItemsContainer.innerHTML = '';
+
+    // 【修改點一】當購物車為空時，也要確保紅點是隱藏的
+    if (cart.length === 0) {
+        cartItemsContainer.innerHTML = '<p class="text-gray-500">您的購物車是空的。</p>';
+        cartCountEls.forEach(el => el.classList.add('hidden'));
+        if (menuCartDot) menuCartDot.classList.add('hidden'); // 確保紅點隱藏
+        return;
+    }
+
+    let totalItems = 0;
+    cart.forEach(item => {
+        totalItems += item.quantity;
+        const itemEl = document.createElement('div');
+        itemEl.className = 'flex justify-between items-center mb-4 p-2 border-b';
+        itemEl.innerHTML = `
+            <div class="w-3/4">
+                <p class="font-bold truncate">${item.name}</p>
+                <p class="text-sm text-gray-600">NT$ ${item.price} x ${item.quantity}</p>
+            </div>
+            <div class="w-1/4 text-right">
+                <button class="remove-from-cart-btn text-red-500 hover:text-red-700 text-sm" data-id="${item.id}">移除</button>
+            </div>
+        `;
+        cartItemsContainer.appendChild(itemEl);
+    });
+
+    // 【修改點二】當購物車有商品時，也要確保紅點是顯示的
+    if (totalItems > 0) {
+        cartCountEls.forEach(el => {
+            el.textContent = totalItems;
+            el.classList.remove('hidden');
         });
-        
-        if (totalItems > 0) {
-            cartCountEls.forEach(el => {
-                el.textContent = totalItems;
-                el.classList.remove('hidden');
-            });
-        } else {
-            cartCountEls.forEach(el => el.classList.add('hidden'));
+        if (menuCartDot) {
+            menuCartDot.classList.remove('hidden'); // 顯示紅點
+        }
+    } else {
+        cartCountEls.forEach(el => el.classList.add('hidden'));
+        if (menuCartDot) {
+            menuCartDot.classList.add('hidden'); // 隱藏紅點
         }
     }
+}
     
     function renderCartTotal() {
         if (!cartTotalEl) return;
